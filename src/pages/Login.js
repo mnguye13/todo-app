@@ -13,28 +13,43 @@ import {
 import "normalize.css/normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-import { BrowserRouter as Router, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Redirect } from "react-router-dom";
 import "./Login.css";
 import companylogo from "../kryptowire.png";
+import Reminder from "./Reminder";
+import Home from "./Home";
+import {useAuth} from "../Auth";
+import { Card, Logo, Form, Input, Error} from "../AuthForms";
 
-function Login() {
+function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isAuthenticated,userHasAuthenticated]=useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  function validateForm() {}
 
-  function handleSubmit(event) {
+  var users = {user:'admin', pass:'admin'}
+
+  function handleSubmit(event,props) {
     event.preventDefault();
     try {
-      if (username === "admin" && password === "admin") {
+      if (username === users.user && password === users.pass) {
+        userHasAuthenticated(true);
         alert("success");
+
       } else {
-        alert("invalid");
+        userHasAuthenticated(false);
+        setIsError(true)
+      }
+
+      if(isAuthenticated){
+        return (<Redirect to ="/reminder"/>);
       }
     } catch (e) {
       alert(e.message);
     }
-  }
+  };
 
   return (
     <Router>
@@ -69,7 +84,9 @@ function Login() {
           <Button className="login-btn" onClick={e => handleSubmit(e)}>
             Sign In
           </Button>
+          {isError && <Error>Invalid Username/Password</Error>}
         </FormGroup>
+  {/*<Route path = "/" render = {() => (isAuthenticated? (<Redirect to = "/reminder" component = {Reminder} />) : (<Redirect to ="/" component = {Home}/>))}/>*/}
       </div>
     </Router>
   );

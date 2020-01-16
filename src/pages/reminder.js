@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../logo.svg";
 import companylogo from "../kryptowire.png";
 import "../App.css";
@@ -31,53 +31,59 @@ function Reminder() {
     }
   ]);
 
-  function handleKeyDown(e, i) {
-    if (e.key === "Enter") {
-      createTodoAtIndex(e, i);
+
+  useEffect(()=>{
+      console.log("render")
+  });
+
+
+  function handleKeyDown(event, index) {
+    if (event.key === "Enter") {
+      createTodoAtIndex(event, index);
     }
-    if (e.key === "Backspace" && todos[i].content === "") {
-      e.preventDefault();
-      return removeTodoAtIndex(i);
+    if (event.key === "Backspace" && todos[index].content === "") {
+      event.preventDefault();
+      return removeTodoAtIndex(index);
     }
   }
 
-  function createTodoAtIndex(e, i) {
+  function createTodoAtIndex(event, index) {
     const newToDos = [...todos];
-    newToDos.splice(i + 1, 0, {
+    newToDos.splice(index + 1, 0, {
       content: "",
       isCompleted: false
     });
     setTodos(newToDos);
     setTimeout(() => {
-      document.forms[0].elements[i + 1].focus();
+      document.forms[0].elements[index + 1].focus();
+      //document.querySelector('todo-list').focus();
     }, 0);
   }
 
-  function updateTodoAtIndex(e, i) {
+  function updateTodoAtIndex(event, index) {
     const newToDos = [...todos];
-    newToDos[i].content = e.target.value;
+    newToDos[index].content = event.target.value;
     setTodos(newToDos);
   }
 
-  function removeTodoAtIndex(i) {
-    if (i === 0 && todos.length === 1) return;
-    setTodos(todos =>
-      todos.slice(0, i).concat(todos.slice(i + 1, todos.length))
-    );
+  function removeTodoAtIndex(index) {
+    if (index === 0 && todos.length === 1) return;
+    setTodos(todos.filter((_,index1) =>index1!==index))
     setTimeout(() => {
-      document.forms[0].elements[i - 1].focus();
+      document.forms[0].elements[index - 1].focus();
+      //document.querySelector('todo-list');
     }, 0);
   }
 
-  function toggleTodoCompleteAtIndex(i) {
+  function toggleTodoCompleteAtIndex(index) {
     const temporaryTodos = [...todos];
-    temporaryTodos[i].isCompleted = !temporaryTodos[i].isCompleted;
+    temporaryTodos[index].isCompleted = !temporaryTodos[index].isCompleted;
     setTodos(temporaryTodos);
   }
 
-  function updateName(e) {
+  function updateName(event) {
     var newName = [...names];
-    newName = e.target.value;
+    newName = event.target.value;
     setNames(newName);
   }
 
@@ -110,7 +116,7 @@ function Reminder() {
     return clock;
   }
 
-  setInterval(timer, 1000);
+  //setInterval(timer, 1000);
 
   var complete = completeTasks();
   var incomplete = incompleteTasks();

@@ -6,7 +6,6 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { render } from "@testing-library/react";
 
-//ReactDOM.render(<Router><App/></Router>, document.getElementById('root'));
 ReactDOM.render(
   <Router>
     <App />
