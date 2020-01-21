@@ -15,6 +15,7 @@ import { isAuthenticate, isUnAuthenticate, setUser } from '../actions';
 
 function Reminder() {
   const [names, setNames] = useState("Minh Nguyen");
+  const [time, setTime] = useState(new Date());
   const isAuthenticated = useSelector(state=> state.isAuthenticate);
   const userData = useSelector(state=>state.setUser);
 
@@ -40,12 +41,6 @@ function Reminder() {
       isCompleted: false
     }
   ]);
-
-
-  useEffect(()=>{
-      console.log("render");
-  });
-
 
   function handleKeyDown(event, index) {
     if (event.key === "Enter") {
@@ -129,9 +124,13 @@ function Reminder() {
   function signout(){
     dispatch(isUnAuthenticate());
   }
-
-  //setInterval(timer, 1000);
-
+  
+  function tick(){
+    setTime(new Date());
+  }
+  
+  setInterval(tick,1000);
+  
   var complete = completeTasks();
   var incomplete = incompleteTasks();
   var progress = (completeTasks() / todos.length) * 100;
@@ -154,7 +153,7 @@ function Reminder() {
         <h3 className="bp3-heading">
           Today's date is {moment().format("MM/DD/YYYY")}
         </h3>
-        <h3 className="bp3-heading">Current time is {clock}</h3>
+      <h3 className="bp3-heading">Current time is {time.toLocaleTimeString()} </h3>
       </div>
 
       <form className="todo-list">
