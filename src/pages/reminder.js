@@ -125,12 +125,15 @@ function Reminder() {
     dispatch(isUnAuthenticate());
   }
   
-  function tick(){
+  async function tick(){
     setTime(new Date());
   }
   
-  setInterval(tick,1000);
+  useEffect(()=>{
+    setInterval(tick,1000);
   
+  })
+
   var complete = completeTasks();
   var incomplete = incompleteTasks();
   var progress = (completeTasks() / todos.length) * 100;

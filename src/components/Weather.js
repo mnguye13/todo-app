@@ -6,12 +6,15 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import './Weather.css';
 
 const Api_key = "9a17f2ed6c0c296ca8d6070af0f493f1";
+var icon_url;
 
 function Weather(){
     const [location,setLocation] = useState("");
     const [isError, setError] = useState(false);
     const [data,setData] = useState([{
         temperature: undefined,
+        temp_min: undefined,
+        temp_max: undefined,
         feels_like: undefined,
         city: undefined,
         country: undefined,
@@ -19,8 +22,13 @@ function Weather(){
         description: undefined,
         datetime: undefined,
         wind: undefined,
-        error: undefined
+        icon: undefined,
+        error: undefined,
     }]);
+
+    icon_url = 'http://openweathermap.org/img/wn/' + data.icon +'.png';
+
+    var weather_element;
 
 
     async function getWeather(){
@@ -36,11 +44,14 @@ function Weather(){
 
             setData({
                 temperature: Math.round((response.main.temp-273.15)*(9/5)+32),
+                temp_min: Math.round((response.main.temp_min-273.15)*(9/5)+32),
+                temp_max: Math.round((response.main.temp_max-273.15)*(9/5)+32),
                 feels_like: Math.round((response.main.feels_like-273.15)*(9/5)+32),
                 city: response.name, 
                 country: response.sys.country,
                 humidity: response.main.humidity,
                 description: response.weather[0].description,
+                icon: response.weather[0].icon,
                 wind: response.wind.speed
             });
             setError(false);
@@ -67,8 +78,10 @@ function Weather(){
                 <button className="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right" onClick = {()=>getWeather()} ></button>
             </div>
             <div className="weatherBox">
-                <p>City: {data.city}, {data.country} </p>
-                <p>Temp: {data.temperature}<span>&#176;</span>F</p>
+                <img src = {icon_url}/> 
+                <h2>{data.city}, {data.country} </h2>
+                <h2>{data.temperature}<span>&#176;</span>F</h2>
+                <h4>{data.temp_min}<span>&#176;</span>F | {data.temp_max}<span>&#176;</span>F</h4>
                 <p>Feel Like: {data.feels_like}<span>&#176;</span>F</p>
                 <p>Humidity: {data.humidity}</p>
                 <p>Wind: {data.wind} mph</p>
