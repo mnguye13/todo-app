@@ -12,14 +12,23 @@ import Login from "./pages/Login";
 import Reminder from "./pages/Reminder";
 import Home from "./pages/Home";
 import PrivateRoute from "./PrivateRoute";
-import {AuthContext} from "./Auth";
+import { useSelector, useDispatch } from 'react-redux';
+import { isAuthenticate, isUnAuthenticate, setUser } from './actions';
+import { useHistory } from "react-router-dom";
+
 function App(props) {
-  const [isAuthenticated, setAuthenticated] = useState();
+  const isAuthenticated = useSelector(state=> state.isAuthenticate); 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const userData = useSelector(state=>state.setUser);
 
   return (
-    <AuthContext.Provider value={true}>
       <Router>
         <nav className="bp3-navbar bp3-dark">
+          <div class="bp3-navbar-group bp3-align-left">
+            <div class="bp3-navbar-heading">Kryptowire</div>
+          </div>
           <div className="bp3-navbar-group bp3-align-right">
             <Link to="/">
               <button className="bp3-button bp3-minimal bp3-icon-home">
@@ -41,12 +50,10 @@ function App(props) {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/users" component={Login} />
-          {/*<Route path="/reminder" component={Reminder} />*/}
-          <PrivateRoute path="/reminder" component={Reminder}/>
+          <PrivateRoute path="/reminder" component={Reminder} />
           <Route path="*" component={()=>"404 NOT FOUND"}/>
         </Switch>
       </Router>
-    </AuthContext.Provider>
   );
 }
 

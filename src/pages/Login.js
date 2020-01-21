@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import moment from "moment";
+import { useSelector, useDispatch } from 'react-redux';
+import { isAuthenticate } from '../actions';
+import { setUser } from '../actions';
 import {
   Button,
   Menu,
@@ -18,38 +21,43 @@ import "./Login.css";
 import companylogo from "../kryptowire.png";
 import Reminder from "./Reminder";
 import Home from "./Home";
-import {useAuth} from "../Auth";
-import { Card, Logo, Form, Input, Error} from "../AuthForms";
+import { Card, Logo, Form, Input, Error, Success} from "../AuthForms";
+import { useHistory } from "react-router-dom";
 
 function Login(props) {
+ 
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isAuthenticated,userHasAuthenticated]=useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
-
-
+  const dispatch = useDispatch();
+  const history = useHistory();
   var users = {user:'admin', pass:'admin'}
+ 
+  const isAuthenticated = useSelector(state=> state.isAuthenticate); 
+  if(isAuthenticated)  history.push("/reminder");
 
   function handleSubmit(event,props) {
     event.preventDefault();
     try {
       if (username === users.user && password === users.pass) {
-        userHasAuthenticated(true);
-        alert("success");
-
+        dispatch(isAuthenticate());
+        setIsError(false);
+        dispatch(setUser({username: username, email:"sample@email.com", errorStatus: isError  }));
       } else {
-        userHasAuthenticated(false);
-        setIsError(true)
-      }
-
-      if(isAuthenticated){
-        return (<Redirect to ="/reminder"/>);
+        setIsError(true);
+        console.log(isError);
       }
     } catch (e) {
       alert(e.message);
     }
   };
+
+  
+
+  function mapStateToProps(state){
+
+  }
 
   return (
     <Router>
@@ -85,8 +93,8 @@ function Login(props) {
             Sign In
           </Button>
           {isError && <Error>Invalid Username/Password</Error>}
+          {isAuthenticated && <Success>Success</Success>}
         </FormGroup>
-  {/*<Route path = "/" render = {() => (isAuthenticated? (<Redirect to = "/reminder" component = {Reminder} />) : (<Redirect to ="/" component = {Home}/>))}/>*/}
       </div>
     </Router>
   );

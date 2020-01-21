@@ -9,9 +9,19 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 import Login from "./Login";
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import { isAuthenticate, isUnAuthenticate, setUser } from '../actions';
 
 function Reminder() {
   const [names, setNames] = useState("Minh Nguyen");
+  const isAuthenticated = useSelector(state=> state.isAuthenticate);
+  const userData = useSelector(state=>state.setUser);
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+  //if(!isAuthenticated2) history.push('/users');
+
   const [todos, setTodos] = useState([
     {
       content: "Learn React",
@@ -33,7 +43,7 @@ function Reminder() {
 
 
   useEffect(()=>{
-      console.log("render")
+      console.log("render");
   });
 
 
@@ -116,6 +126,10 @@ function Reminder() {
     return clock;
   }
 
+  function signout(){
+    dispatch(isUnAuthenticate());
+  }
+
   //setInterval(timer, 1000);
 
   var complete = completeTasks();
@@ -125,16 +139,17 @@ function Reminder() {
 
   return (
     <div className="app">
+              <h1>Status: {isAuthenticated?"Logged in":0}</h1>
       <div className="header">
         <img src={companylogo} className="logo1" alt="companylogo" />
-        <h2 className="bp3-heading">Hello</h2>
+        <h2 className="bp3-heading">Hello <a className="nameField">{userData.username}</a></h2>
 
-        <input
+        {/*<input
           className="nameField "
           type="text"
           value={names}
           onChange={e => updateName(e)}
-        />
+        />*/}
 
         <h3 className="bp3-heading">
           Today's date is {moment().format("MM/DD/YYYY")}
@@ -178,6 +193,7 @@ function Reminder() {
           ))}
         </ul>
         <Button intent="success" text="Print" onClick={() => printLists()} />
+        <Button  text="Sign Out" onClick={()=>{signout()}} />
       </form>
     </div>
   );

@@ -42,6 +42,12 @@ const Logo = styled.img`
 
 const Error = styled.div`
   background-color: red;
+  margin-top: 1rem;
 `;
 
-export { Form, Input, Button, Logo, Card, Error };
+const Success = styled.div`
+  background-color: green;
+  margin-top: 1rem;
+`;
+
+export { Form, Input, Button, Logo, Card, Error, Success };
