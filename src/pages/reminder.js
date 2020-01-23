@@ -9,15 +9,16 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 import Login from "./Login";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { isAuthenticate, isUnAuthenticate, setUser } from '../actions';
+import { setAuthenticate, setUnAuthenticate, setUser } from "../actions";
+import { authenticateSlice } from "../slice/setSlice";
 
 function Reminder() {
   const [names, setNames] = useState("Minh Nguyen");
   const [time, setTime] = useState(new Date());
-  const isAuthenticated = useSelector(state=> state.isAuthenticate);
-  const userData = useSelector(state=>state.setUser);
+  const isAuthenticated = useSelector(state => state.isAuthenticate);
+  const userData = useSelector(state => state.setUser);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ function Reminder() {
 
   function removeTodoAtIndex(index) {
     if (index === 0 && todos.length === 1) return;
-    setTodos(todos.filter((_,index1) =>index1!==index))
+    setTodos(todos.filter((_, index1) => index1 !== index));
     setTimeout(() => {
       document.forms[0].elements[index - 1].focus();
       //document.querySelector('todo-list');
@@ -121,18 +122,17 @@ function Reminder() {
     return clock;
   }
 
-  function signout(){
-    dispatch(isUnAuthenticate());
+  function signout() {
+    dispatch(authenticateSlice.actions.setUnAuthenticate());
   }
-  
-  async function tick(){
+
+  async function tick() {
     setTime(new Date());
   }
-  
-  useEffect(()=>{
-    setInterval(tick,1000);
-  
-  })
+
+  useEffect(() => {
+    setInterval(tick, 1000);
+  });
 
   var complete = completeTasks();
   var incomplete = incompleteTasks();
@@ -141,10 +141,12 @@ function Reminder() {
 
   return (
     <div className="app">
-              <h1>Status: {isAuthenticated?"Logged in":0}</h1>
+      <h1>Status: {isAuthenticated ? "Logged in" : 0}</h1>
       <div className="header">
         <img src={companylogo} className="logo1" alt="companylogo" />
-        <h2 className="bp3-heading">Hello <a className="nameField">{userData.username}</a></h2>
+        <h2 className="bp3-heading">
+          Hello <a className="nameField">{userData.username}</a>
+        </h2>
 
         {/*<input
           className="nameField "
@@ -156,7 +158,9 @@ function Reminder() {
         <h3 className="bp3-heading">
           Today's date is {moment().format("MM/DD/YYYY")}
         </h3>
-      <h3 className="bp3-heading">Current time is {time.toLocaleTimeString()} </h3>
+        <h3 className="bp3-heading">
+          Current time is {time.toLocaleTimeString()}{" "}
+        </h3>
       </div>
 
       <form className="todo-list">
@@ -195,7 +199,12 @@ function Reminder() {
           ))}
         </ul>
         <Button intent="success" text="Print" onClick={() => printLists()} />
-        <Button  text="Sign Out" onClick={()=>{signout()}} />
+        <Button
+          text="Sign Out"
+          onClick={() => {
+            signout();
+          }}
+        />
       </form>
     </div>
   );

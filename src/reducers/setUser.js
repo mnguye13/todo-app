@@ -1,10 +1,13 @@
-const userReducer = (state ={}, action) =>{
-    switch(action.type){
-        case 'SETUSER': 
-            return {...state, ...action.userData}
-        default: return state; 
-    }
+import { setUser } from "../actions";
+import { createReducer } from "@reduxjs/toolkit";
 
-}
+const userReducer = createReducer(
+  {},
+  {
+    [setUser]: (state, action) => {
+      return { ...state, ...action.payload };
+    }
+  }
+);
 
 export default userReducer;

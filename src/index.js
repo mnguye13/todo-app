@@ -5,14 +5,23 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { render } from "@testing-library/react";
-import { createStore } from 'redux';
-import appReducers from './reducers';
-import { Provider } from 'react-redux';
-const store = createStore(appReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+import { createStore } from "redux";
+import appReducers from "./reducers";
+import { Provider } from "react-redux";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./localization/i18n";
+const store = createStore(
+  appReducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.render(
   <Router>
-    <Provider store={store}><App /></Provider>
+    <Provider store={store}>
+      <I18nextProvider i18n={i18n}>
+        <App />
+      </I18nextProvider>
+    </Provider>
   </Router>,
   document.querySelector("#root")
 );

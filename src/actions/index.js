@@ -1,13 +1,5 @@
-export const isAuthenticate = ()=>{
-    return { type: 'AUTHENTICATED'}
-}
-export const isUnAuthenticate = ()=>{
-    return { type :'UNAUTHENTICATED'}
-}
+import { createAction } from "@reduxjs/toolkit";
 
-export const setUser = (userData) =>{
-    return {
-        type: 'SETUSER',
-        userData
-    }
-}
+export const setAuthenticate = createAction("AUTHENTICATED");
+export const setUnAuthenticate = createAction("UNAUTHENTICATED");
+export const setUser = createAction("SETUSER");

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import moment from "moment";
-import { useSelector, useDispatch } from 'react-redux';
-import { isAuthenticate } from '../actions';
-import { setUser } from '../actions';
+import { useSelector, useDispatch } from "react-redux";
+//import { setUser } from "../actions";
 import {
   Button,
   Menu,
@@ -16,34 +14,41 @@ import {
 import "normalize.css/normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-import { BrowserRouter as Router, Link, Route, Redirect } from "react-router-dom";
+import { authenticateSlice, userSlice } from "../slice/setSlice";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  Redirect
+} from "react-router-dom";
 import "./Login.css";
 import companylogo from "../kryptowire.png";
-import Reminder from "./Reminder";
-import Home from "./Home";
-import { Card, Logo, Form, Input, Error, Success} from "../AuthForms";
+import { Card, Logo, Form, Input, Error, Success } from "../AuthForms";
 import { useHistory } from "react-router-dom";
 
 function Login(props) {
- 
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
-  var users = {user:'admin', pass:'admin'}
- 
-  const isAuthenticated = useSelector(state=> state.isAuthenticate); 
-  if(isAuthenticated)  history.push("/reminder");
+  var users = { user: "admin", pass: "admin" };
 
-  function handleSubmit(event,props) {
+  const isAuthenticated = useSelector(state => state.isAuthenticate);
+  if (isAuthenticated) history.push("/reminder");
+
+  function handleSubmit(event, props) {
     event.preventDefault();
     try {
       if (username === users.user && password === users.pass) {
-        dispatch(isAuthenticate());
+        //dispatch(setAuthenticate());
+        dispatch(authenticateSlice.actions.setAuthenticate());
         setIsError(false);
-        dispatch(setUser({username: username, email:"sample@email.com", errorStatus: isError  }));
+        dispatch(
+          userSlice.actions.setUser({
+            username: username
+          })
+        );
       } else {
         setIsError(true);
         console.log(isError);
@@ -51,12 +56,6 @@ function Login(props) {
     } catch (e) {
       alert(e.message);
     }
-  };
-
-  
-
-  function mapStateToProps(state){
-
   }
 
   return (
