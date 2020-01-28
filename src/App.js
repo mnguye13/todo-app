@@ -11,7 +11,9 @@ import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Reminder from "./pages/Reminder";
 import Home from "./pages/Home";
+import Settings from "./pages/Settings";
 import PrivateRoute from "./PrivateRoute";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -45,6 +47,7 @@ function App(props) {
         <Route path="/" exact component={Home} />
         <Route path="/users" component={Login} />
         <PrivateRoute path="/reminder" component={Reminder} />
+        <Route path="/settings" component={Settings} />
         <Route path="*" component={() => "404 NOT FOUND"} />
       </Switch>
     </Router>

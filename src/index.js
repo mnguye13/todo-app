@@ -9,7 +9,10 @@ import { createStore } from "redux";
 import appReducers from "./reducers";
 import { Provider } from "react-redux";
 import { I18nextProvider } from "react-i18next";
+import { ApolloProvider } from "@apollo/react-hooks";
 import i18n from "./localization/i18n";
+import { client } from "./pages/Settings";
+
 const store = createStore(
   appReducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
@@ -19,7 +22,9 @@ ReactDOM.render(
   <Router>
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
-        <App />
+        <ApolloProvider client={client}>
+          <App />
+        </ApolloProvider>
       </I18nextProvider>
     </Provider>
   </Router>,

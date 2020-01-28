@@ -22,7 +22,7 @@ import { useHistory } from "react-router-dom";
 import { authenticateSlice } from "../slice/setSlice";
 import Weather from "../components/Weather";
 import { useTranslation, Trans } from "react-i18next";
-import i18n from "../localization/i18n";
+//import i18n from "../localization/i18n";
 
 function Home(props) {
   const isAuthenticated = useSelector(state => state.isAuthenticate);
